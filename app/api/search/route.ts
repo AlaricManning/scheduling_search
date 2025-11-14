@@ -1,0 +1,55 @@
+import { NextRequest } from 'next/server'
+import { searchTemplates } from '@/lib/openai'
+import OpenAI from 'openai'
+
+const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY })
+
+export async function POST(req: NextRequest) {
+  const { text } = await req.json()
+  const results = await searchTemplates(text)
+  const best = results[0]
+  if (!best) return Response.json({ error: "No match" }, { status: 404 })
+
+  const response = await openai.chat.completions.create({
+    model: 'gpt-4o',
+    messages: [{ role: 'user', content: text }],
+    tools: [{
+      type: 'function',
+      function: {
+        name: 'extract_params',
+        parameters: {
+          type: 'object',
+          properties: {
+            min: { type: 'integer', default: 1 },
+            max: { type: 'integer', default: 999 },
+            games: { type: 'array', items: { type: 'string' } },
+            rounds: { type: 'array', items: { type: 'string' } },
+            venues: { type: 'array', items: { type: 'string' } },
+            networks: { type: 'array', items: { type: 'string' } },
+            teams: { type: 'array', items: { type: 'string' } }
+          }
+        }
+      }
+    }],
+    tool_choice: 'auto'
+  })
+
+  const args = response.choices[0].message.tool_calls?.[0]?.function.arguments
+  const params = args ? JSON.parse(args) : {}
+
+  let filled = best.template
+  for (const [k, v] of Object.entries(params)) {
+    filled = filled.replace(new RegExp(`\\{${k}\\}`, 'g'), Array.isArray(v) ? v.join(', ') : String(v))
+  }
+
+  return Response.json({
+    template: `Template ${best.id}: ${best.name}`,
+    confidence: Number(best.similarity.toFixed(2)),
+    parsedConstraint: filled,
+    parameters: params,
+    alternatives: results.slice(1).map(r => ({
+      template: `Template ${r.id}: ${r.name}`,
+      confidence: Number(r.similarity.toFixed(2))
+    }))
+  })
+}
