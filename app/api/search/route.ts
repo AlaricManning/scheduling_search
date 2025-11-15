@@ -1,6 +1,7 @@
 // app/api/search/route.ts
 import { searchTemplates } from '@/lib/openai'
 import OpenAI from 'openai'
+import type { Template } from '@/lib/types'
 
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY })
 

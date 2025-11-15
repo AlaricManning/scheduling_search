@@ -1,5 +1,6 @@
 import OpenAI from 'openai'
 import { supabaseAdmin } from './supabase.cjs'
+import type { Template } from './types'
 
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY })
 
@@ -11,7 +12,7 @@ export async function getEmbedding(text: string) {
   return res.data[0].embedding
 }
 
-export async function searchTemplates(query: string) {
+export async function searchTemplates(query: string): Promise<Template[]>  {
   console.log('Searching templates for query:', query)
   const embedding = await getEmbedding(query)
   console.log('Query embedding obtained')
