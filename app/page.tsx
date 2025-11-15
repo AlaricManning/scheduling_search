@@ -3,7 +3,7 @@ import { createServerComponentClient } from '@supabase/auth-helpers-nextjs'
 import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
 import ClientSearch from '@/components/ClientSearch'
-import LogoutButton from '@/components/LogoutButton'
+import LogoutButton from '../components/LogoutButton'
 
 export default async function Home() {
   const supabase = createServerComponentClient({ cookies })
