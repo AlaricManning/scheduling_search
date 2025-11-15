@@ -13,15 +13,21 @@ export async function getEmbedding(text: string) {
 }
 
 export async function searchTemplates(query: string): Promise<Template[]>  {
-  console.log('Searching templates for query:', query)
+  // console.log('Searching templates for query:', query)
   const embedding = await getEmbedding(query)
-  console.log('Query embedding obtained')
-  console.log('Calling match_templates RPC with embedding:', embedding)
+  // console.log('Query embedding obtained')
+  // console.log('Calling match_templates RPC with embedding:', embedding)
   const { data, error } = await supabaseAdmin.rpc('match_templates', {
     query_embedding: embedding,
     match_threshold: 0.75,
     match_count: 3,
   })
   if (error) throw error
-  return data
+  return data.map((row: any) => ({
+      id: row.id,
+      name: row.name,
+      template: row.template,
+      similarity: row.similarity
+    }))
+  // return data
 }

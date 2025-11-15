@@ -42,15 +42,18 @@ export async function POST(req: Request) {
     }],
     tool_choice: 'auto'
   })
+  console.log('Parameter extraction response:', response)
+  
 
   const args = response.choices[0].message.tool_calls?.[0]?.function.arguments
+  console.log('Extracted arguments:', args)
   const params = args ? JSON.parse(args) : {}
+  console.log('Parsed parameters:', params)
 
   let filled = best.template
   for (const [k, v] of Object.entries(params)) {
     filled = filled.replace(new RegExp(`\\{${k}\\}`, 'g'), Array.isArray(v) ? v.join(', ') : String(v))
   }
-
   return Response.json({
     template: `Template ${best.id}: ${best.name}`,
     confidence: Number(best.similarity.toFixed(2)),
