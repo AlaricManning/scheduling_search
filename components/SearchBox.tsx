@@ -8,18 +8,35 @@ export default function SearchBox({ onResult }: { onResult: (r: any) => void }) 
   const [loading, setLoading] = useState(false)
 
   useEffect(() => {
-    if (debounced.trim()) {
-      setLoading(true)
-      fetch('/api/search', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ text: debounced })
-      })
-        .then(r => r.json())
-        .then(data => { onResult(data); setLoading(false) })
-        .catch(() => setLoading(false))
+    const controller = new AbortController()
+
+    if (!debounced.trim()) {
+      onResult(null)
+      return
     }
+
+    setLoading(true)
+
+    fetch('/api/search', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ text: debounced }),
+      signal: controller.signal
+    })
+      .then(r => r.json())
+      .then(data => {
+        if (!controller.signal.aborted) {
+          onResult(data)
+          setLoading(false)
+        }
+      })
+      .catch(err => {
+        if (err.name !== 'AbortError') setLoading(false)
+      })
+
+    return () => controller.abort()
   }, [debounced])
+
 
   return (
     <div className="w-full max-w-4xl mx-auto">

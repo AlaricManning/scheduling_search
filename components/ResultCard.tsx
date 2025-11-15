@@ -1,5 +1,12 @@
 // components/ResultCard.tsx
 export default function ResultCard({ result }: { result: any }) {
+  if (result?.error) {
+      return (
+        <div className="mt-10 p-6 bg-red-50 border border-red-200 rounded-xl">
+          <p className="text-red-700 font-medium">{result.error}</p>
+        </div>
+      )
+    }
   return (
     <div className="mt-10 p-6 bg-white rounded-xl shadow-lg border border-gray-200">
       <div className="flex justify-between items-center mb-4">

@@ -20,7 +20,7 @@ export async function searchTemplates(query: string): Promise<Template[]>  {
   console.log('Calling match_templates RPC with embedding:', embedding)
   const { data, error } = await supabaseAdmin.rpc('match_templates', {
     query_embedding: embedding,
-    match_threshold: 0.5,
+    match_threshold: 0.65,
     match_count: 3,
   })
   if (error) throw error
