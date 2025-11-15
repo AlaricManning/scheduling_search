@@ -1,24 +1,23 @@
-import { NextRequest } from 'next/server'
+// app/api/search/route.ts
 import { searchTemplates } from '@/lib/openai'
 import OpenAI from 'openai'
 
-interface Template {
-  id: number
-  name: string
-  template: string
-  similarity: number
-}
-
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY })
 
-export async function POST(req: NextRequest) {
+export async function POST(req: Request) {
   const { text } = await req.json()
   console.log('Received text:', text)
+
   const results = await searchTemplates(text)
   console.log('Search results:', results)
-  const best = results[0]
-  if (!best) return Response.json({ error: "No match" }, { status: 404 })
 
+  if (!results || results.length === 0) {
+    return Response.json({ error: "No match" }, { status: 404 })
+  }
+
+  const best = results[0]
+
+  // Parse parameters
   const response = await openai.chat.completions.create({
     model: 'gpt-4o',
     messages: [{ role: 'user', content: text }],
@@ -56,7 +55,7 @@ export async function POST(req: NextRequest) {
     confidence: Number(best.similarity.toFixed(2)),
     parsedConstraint: filled,
     parameters: params,
-    alternatives: results.slice(1).map((r: Template) => ({
+    alternatives: results.slice(1).map(r => ({
       template: `Template ${r.id}: ${r.name}`,
       confidence: Number(r.similarity.toFixed(2))
     }))

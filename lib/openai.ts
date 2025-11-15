@@ -12,7 +12,10 @@ export async function getEmbedding(text: string) {
 }
 
 export async function searchTemplates(query: string) {
+  console.log('Searching templates for query:', query)
   const embedding = await getEmbedding(query)
+  console.log('Query embedding obtained')
+  console.log('Calling match_templates RPC with embedding:', embedding)
   const { data, error } = await supabaseAdmin.rpc('match_templates', {
     query_embedding: embedding,
     match_threshold: 0.75,

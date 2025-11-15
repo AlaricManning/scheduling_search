@@ -1,4 +1,3 @@
-// scripts/seed-templates.ts
 require('dotenv').config()
 const { supabaseAdmin } = require('../lib/supabase.cjs')
 const { constraintTemplates } = require('../lib/templates.cjs')
@@ -18,13 +17,17 @@ async function seed() {
   for (const t of constraintTemplates) {
     const text = [...t.examples, t.name].join(' | ')
     const embedding = await getEmbedding(text)
-    await supabaseAdmin.from('constraint_templates').upsert({
+
+    const { data, error } = await supabaseAdmin.from('constraint_templates').upsert([{
       id: t.id,
       name: t.name,
       template: t.template,
       examples: t.examples,
       embedding,
-    }, { onConflict: 'id' })
+    }], { onConflict: 'id' })
+
+    if (error) console.error('Supabase upsert error:', error)
+    else console.log('Inserted:', t.id)
   }
   console.log('Seeded!')
 }
