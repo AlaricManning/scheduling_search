@@ -3,6 +3,7 @@ import { supabaseAdmin } from './supabase.cjs'
 import type { Template } from './types'
 
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY })
+// console.log('OpenAI client initialized in openai.ts', openai)
 
 export async function getEmbedding(text: string) {
   const res = await openai.embeddings.create({
@@ -13,13 +14,13 @@ export async function getEmbedding(text: string) {
 }
 
 export async function searchTemplates(query: string): Promise<Template[]>  {
-  // console.log('Searching templates for query:', query)
+  console.log('Searching templates for query:', query)
   const embedding = await getEmbedding(query)
-  // console.log('Query embedding obtained')
-  // console.log('Calling match_templates RPC with embedding:', embedding)
+  console.log('Query embedding obtained')
+  console.log('Calling match_templates RPC with embedding:', embedding)
   const { data, error } = await supabaseAdmin.rpc('match_templates', {
     query_embedding: embedding,
-    match_threshold: 0.75,
+    match_threshold: 0.5,
     match_count: 3,
   })
   if (error) throw error
