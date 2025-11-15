@@ -15,7 +15,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      {/* THIS KILLS THE FAVICON REQUEST FOREVER */}
+      {}
       <head>
         <link rel="icon" href="data:," />
       </head>

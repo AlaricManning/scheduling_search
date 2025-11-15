@@ -1,5 +1,5 @@
 import OpenAI from 'openai'
-import { supabase } from './supabase'
+import { supabaseAdmin } from './supabase.cjs'
 
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY })
 
@@ -13,7 +13,7 @@ export async function getEmbedding(text: string) {
 
 export async function searchTemplates(query: string) {
   const embedding = await getEmbedding(query)
-  const { data, error } = await supabase.rpc('match_templates', {
+  const { data, error } = await supabaseAdmin.rpc('match_templates', {
     query_embedding: embedding,
     match_threshold: 0.75,
     match_count: 3,

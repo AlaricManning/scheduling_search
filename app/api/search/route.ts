@@ -13,7 +13,9 @@ const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY })
 
 export async function POST(req: NextRequest) {
   const { text } = await req.json()
+  console.log('Received text:', text)
   const results = await searchTemplates(text)
+  console.log('Search results:', results)
   const best = results[0]
   if (!best) return Response.json({ error: "No match" }, { status: 404 })
 

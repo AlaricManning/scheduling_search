@@ -1,3 +1,4 @@
+// components/ResultCard.tsx
 export default function ResultCard({ result }: { result: any }) {
   return (
     <div className="mt-10 p-6 bg-white rounded-xl shadow-lg border border-gray-200">
@@ -8,10 +9,14 @@ export default function ResultCard({ result }: { result: any }) {
         </span>
       </div>
       <p className="text-gray-700 mb-5">{result.parsedConstraint}</p>
-      <pre className="text-sm bg-gray-50 p-4 rounded-lg overflow-x-auto">
-        {JSON.stringify(result.parameters, null, 2)}
-      </pre>
-      {result.alternatives.length > 0 && (
+      <div className="bg-gray-50 p-4 rounded-lg">
+        <pre className="text-sm font-mono overflow-x-auto">
+          {JSON.stringify(result.parameters, null, 2)}
+        </pre>
+      </div>
+
+      {/* SAFE CHECK FOR ALTERNATIVES */}
+      {result.alternatives && result.alternatives.length > 0 && (
         <div className="mt-5 pt-5 border-t">
           <p className="text-sm font-semibold text-gray-600 mb-2">Alternatives:</p>
           {result.alternatives.map((a: any, i: number) => (

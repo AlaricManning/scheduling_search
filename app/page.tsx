@@ -7,7 +7,6 @@ import ClientSearch from '@/components/ClientSearch'
 export default async function Home() {
   const supabase = createServerComponentClient({ cookies })
 
-  // THIS IS THE ONLY WAY THAT WORKS 100%
   const { data: { user } } = await supabase.auth.getUser()
 
   if (!user) {
