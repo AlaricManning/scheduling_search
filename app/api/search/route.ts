@@ -21,7 +21,19 @@ export async function POST(req: Request) {
   // Parse parameters
   const response = await openai.chat.completions.create({
     model: 'gpt-4o',
-    messages: [{ role: 'user', content: text }],
+    messages: [
+      {
+      role: 'system',
+      content: `You are a scheduling constraint parser. Extract parameters EXACTLY matching the template structure. 
+      Use placeholder values like "rivalry_games", "weekend_rounds", "all_venues" when the user doesn't specify exact values.
+      For "all rivalry games" → games: ["rivalry_games"]
+      For "on a weekend" → rounds: ["weekend_rounds"]
+      For "on ESPN" → networks: ["ESPN"]
+      For venues not specified → venues: ["all_venues"]
+      min defaults to 1, max to 999 unless specified.`
+      },
+      { role: 'user', content: text }
+    ],
     tools: [{
       type: 'function',
       function: {
@@ -40,7 +52,8 @@ export async function POST(req: Request) {
         }
       }
     }],
-    tool_choice: 'auto'
+    tool_choice: { type: 'function', function: { name: 'extract_params' } }
+    // tool_choice: 'auto'
   })
   console.log('Parameter extraction response:', response)
   
@@ -51,9 +64,23 @@ export async function POST(req: Request) {
   console.log('Parsed parameters:', params)
 
   let filled = best.template
-  for (const [k, v] of Object.entries(params)) {
-    filled = filled.replace(new RegExp(`\\{${k}\\}`, 'g'), Array.isArray(v) ? v.join(', ') : String(v))
+  // Replace with actual values, fallback to placeholders
+  const paramMap: Record<string, string> = {
+    min: String(params.min ?? 1),
+    max: String(params.max ?? 999),
+    games: (params.games ?? ['rivalry_games']).join(', '),
+    rounds: (params.rounds ?? ['weekend_rounds']).join(', '),
+    venues: (params.venues ?? ['all_venues']).join(', '),
+    networks: (params.networks ?? ['ESPN']).join(', ')
   }
+
+  for (const [k, v] of Object.entries(paramMap)) {
+    filled = filled.replace(new RegExp(`\\{${k}\\}`, 'g'), v)
+  }
+
+  // for (const [k, v] of Object.entries(params)) {
+  //   filled = filled.replace(new RegExp(`\\{${k}\\}`, 'g'), Array.isArray(v) ? v.join(', ') : String(v))
+  // }
   return Response.json({
     template: `Template ${best.id}: ${best.name}`,
     confidence: Number(best.similarity.toFixed(2)),
