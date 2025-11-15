@@ -2,6 +2,13 @@ import { NextRequest } from 'next/server'
 import { searchTemplates } from '@/lib/openai'
 import OpenAI from 'openai'
 
+interface Template {
+  id: number
+  name: string
+  template: string
+  similarity: number
+}
+
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY })
 
 export async function POST(req: NextRequest) {
@@ -47,7 +54,7 @@ export async function POST(req: NextRequest) {
     confidence: Number(best.similarity.toFixed(2)),
     parsedConstraint: filled,
     parameters: params,
-    alternatives: results.slice(1).map(r => ({
+    alternatives: results.slice(1).map((r: Template) => ({
       template: `Template ${r.id}: ${r.name}`,
       confidence: Number(r.similarity.toFixed(2))
     }))
