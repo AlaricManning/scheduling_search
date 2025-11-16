@@ -33,7 +33,7 @@ semantic search interface that translates natural language scheduling objectives
 
 ## Challenges
 - Rusty Javascript
-- Param Extraction: Could do a better job with a dedicated Named Entity Recognition (NER) model
+- Param Extraction: Could do a better job with a more dedicated model to the task (NER / SVM / NN / BERT)
 - Autocomplete search bar (messed around with getting it to work in a branch but ran out of time)
 
 ---
@@ -44,6 +44,10 @@ semantic search interface that translates natural language scheduling objectives
 
 - **Test Email**: alaric.manning.career@gmail.com
 - **Test Pass**: test0000
+- **Examples**
+1. Schedule at least 3 of the big rivalries in the last two weeks on CBS or ESPN
+2. Ensure all rivalry games on a weekend on ESPN
+3. Prevent any team from playing three road games in a row after Week 6
 
 ---
 
