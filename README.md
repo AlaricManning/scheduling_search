@@ -77,9 +77,17 @@ semantic search interface that translates natural language scheduling objectives
 - git clone <https://github.com/AlaricManning/scheduling_search.git>
 - cd scheduling_search
 - npm install
-3. **Run the App**
+3. **Set Env Keys**
+- See .env.example
+4. **DB Setup**
+- Create templates table in Supabase using the queries in supabase/
+5. **Seed DB**
+- npm run seed
+- populates the DB with template data from lib/templates.cjs
+6. **Run the App**
 - npm run dev
-- # Open http://localhost:3000
+7. **Run Tests**
+- npm run test
 
 ---
 
