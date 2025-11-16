@@ -24,7 +24,7 @@ semantic search interface that translates natural language scheduling objectives
 ## Trade Offs
 | Option | Easy to Use? | Cost | Best For |
 |--------|--------------|------|----------|
-| **OpenAI + Supabase pgvector** | Easy (Already Using Supabase) | Very cheap | Small apps, quick test |
+| **OpenAI + Supabase pgvector** | Easy (Already Using Supabase) | Very cheap | Small apps, quick test **THIS APP** |
 | **Algolia AI Search** | Very easy (no code) | Free → $1/month | Fancy search UI |
 | **Pinecone** | Easy (SDK) | Free → $10+/month | Big apps |
 | **Qdrant** | Medium (need server) | Free (self-host) | Saving money later |
