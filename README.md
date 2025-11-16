@@ -34,6 +34,7 @@ semantic search interface that translates natural language scheduling objectives
 ## Challenges
 - Rusty Javascript
 - Param Extraction: Could do a better job with a dedicated Named Entity Recognition (NER) model
+- Autocomplete search bar (messed around with getting it to work in a branch but ran out of time)
 
 ---
 
@@ -66,6 +67,19 @@ semantic search interface that translates natural language scheduling objectives
    - Extracted parameters
    - Confidence score
    - Alternatives
+
+---
+
+## Steps
+1. **Prerequisites**
+- Node.js (LTS recommended, Node 18+)
+2. **Clone and Install**
+- git clone <https://github.com/AlaricManning/scheduling_search.git>
+- cd scheduling_search
+- npm install
+3. **Run the App**
+- npm run dev
+- # Open http://localhost:3000
 
 ---
 
