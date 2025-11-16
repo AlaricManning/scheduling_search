@@ -40,7 +40,7 @@ semantic search interface that translates natural language scheduling objectives
 
 ## Live Demo
 
-[https://schedulingsearchvercel-3g40mqzd3-alaricmannings-projects.vercel.app/](https://schedulingsearchvercel-3g40mqzd3-alaricmannings-projects.vercel.app/)
+[https://schedulingsearchvercel.vercel.app/login](https://schedulingsearchvercel.vercel.app/login)
 
 - **Test Email**: alaric.manning.career@gmail.com
 - **Test Pass**: test0000
