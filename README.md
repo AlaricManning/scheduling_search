@@ -1,19 +1,6 @@
 # scheduling_search
 semantic search interface that translates natural language scheduling objectives into structured constraint templates for sports league scheduling optimization.
 
-## WorkFlow
-**User Input**
-↓
-**[OpenAI]** → Embedding (3072-dim vector)
-↓
-**[pgvector]** → Vector similarity search (cosine)
-↓
-**Best Template Match**
-↓
-**[gpt-4o]** → Extract parameters (min, max, games, etc.)
-↓
-**UI** → **Template** + **Confidence** + **Alternatives**
-
 
 ## Features / Approach
 
